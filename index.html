@@ -15,7 +15,6 @@
       --yes:#ff3b7a;
       --yesHover:#ff1f68;
       --ink:#111827;
-      --soft:#ff7aa2;
       --line:rgba(17,24,39,.10);
     }
     *{box-sizing:border-box}
@@ -191,14 +190,9 @@
       white-space:nowrap;
     }
 
-    .dialogue{
-      display:grid;
-      gap:10px;
-      margin-top:10px;
-    }
+    .dialogue{display:grid;gap:10px;margin-top:10px;}
     .line{
       display:grid;
-      grid-template-columns: 1fr;
       gap:6px;
       padding:12px 12px;
       border-radius:14px;
@@ -215,12 +209,9 @@
       align-items:center;
     }
     .who .emoji{font-size:16px}
-    .say{
-      font-size:15px;
-      opacity:.95;
-    }
+    .say{font-size:15px;opacity:.95;}
 
-    /* ✅ Spotify starts hidden (for proper toggle) */
+    /* Spotify starts hidden; shown on YES or via toggle button */
     .spotify{
       display:none;
       width:min(560px,94%);
@@ -229,6 +220,12 @@
       overflow:hidden;
       border:1px solid rgba(0,0,0,.08);
       background:rgba(255,255,255,.5);
+    }
+
+    .footerNote{
+      margin-top:12px;
+      opacity:.8;
+      font-size:13px;
     }
 
     .fireworks{
@@ -249,10 +246,7 @@
       transition:transform .04s linear;
     }
 
-    @keyframes pop{
-      from{transform:scale(.96);opacity:0;}
-      to{transform:scale(1);opacity:1;}
-    }
+    @keyframes pop{from{transform:scale(.96);opacity:0;}to{transform:scale(1);opacity:1;}}
   </style>
 </head>
 
@@ -371,13 +365,13 @@
           </div>
         </div>
 
-     <div style="margin-top:12px; opacity:.8; font-size:13px;">
-  If you’re reading this, Vidhi… yes, it’s you. 🐢  
-  Some people become a feeling before they become a sentence.
-</div>
-
+        <div class="footerNote">
+          If you’re reading this, Vidhi… yes, it’s you. 🐢<br>
+          The one who makes ordinary moments feel quietly special.
+        </div>
       </div>
 
+      <!-- Cigarettes After Sex vibe: "Apocalypse" -->
       <div class="spotify" id="spotifyBox" aria-label="Spotify player">
         <iframe
           title="Cigarettes After Sex - Apocalypse"
@@ -509,15 +503,23 @@
 
     noBtn.addEventListener("click", e => e.preventDefault());
 
-    // YES flow
+    // ✅ YES flow: show story + show music + scroll to music (feels automatic)
     yesBtn.addEventListener("click", () => {
       document.title = "Vidhi 💖 Valentine";
       zone.style.display = "none";
       hint.style.display = "none";
       result.style.display = "block";
+
       resizeConfettiCanvas();
       fullScreenConfetti();
+
       poemPanel.style.display = "block";
+      spotifyBox.style.display = "block";
+      musicBtn.textContent = "Now playing our vibe 🎶";
+
+      setTimeout(() => {
+        spotifyBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 400);
     });
 
     // story toggle
@@ -528,7 +530,7 @@
       }
     });
 
-    // ✅ music toggle (fixed)
+    // ✅ music toggle
     musicBtn.addEventListener("click", () => {
       const isOpen = spotifyBox.style.display === "block";
       if (isOpen) {
@@ -536,7 +538,7 @@
         musicBtn.textContent = "Play our vibe 🎶";
       } else {
         spotifyBox.style.display = "block";
-        musicBtn.textContent = "Hide our vibe 🙈";
+        musicBtn.textContent = "Now playing our vibe 🎶";
         spotifyBox.scrollIntoView({ behavior: "smooth", block: "center" });
       }
     });
