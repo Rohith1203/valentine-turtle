@@ -72,6 +72,14 @@
       opacity:.78;
     }
 
+    .nick{
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(255,59,122,.12);
+      font-weight:800;
+    }
+
     .button-zone{
       position:relative;
       width:min(520px,92%);
@@ -186,8 +194,11 @@
     />
   </div>
 
-  <h1>Cutuu turtle, will you be my Valentine?</h1>
-  <p class="sub">(aka Vidhu 🐢)</p>
+  <!-- ROTATING NAME -->
+  <h1>
+    <span id="nameLine">Vidhu</span>, will you be my Valentine?
+  </h1>
+  <p class="sub">(aka <span class="nick" id="nick">Vidhu</span> 🐢)</p>
 
   <section class="button-zone" id="zone">
     <button id="yesBtn">Yes</button>
@@ -199,14 +210,9 @@
   <section class="result" id="result">
     <h2>Valentine unlocked 🐢💖</h2>
 
-    <!-- POEM (UNCHANGED) -->
     <div class="chips">
-      <button class="chipbtn primary" id="storyBtn" type="button">
-        A tiny story 🌙
-      </button>
-      <button class="chipbtn" id="musicBtn" type="button">
-        Play our vibe 🎶
-      </button>
+      <button class="chipbtn primary" id="storyBtn">A tiny story 🌙</button>
+      <button class="chipbtn" id="musicBtn">Play our vibe 🎶</button>
     </div>
 
     <div class="panel" id="story">
@@ -254,6 +260,19 @@
 </main>
 
 <script>
+  /* ---------- ROTATING NICKNAMES ---------- */
+  const names = ["Vidhu", "Vidd", "Tipsy Turtle", "Cutuu Turtle"];
+  let i = 0;
+  const nameLine = document.getElementById("nameLine");
+  const nick = document.getElementById("nick");
+
+  setInterval(() => {
+    i = (i + 1) % names.length;
+    nameLine.textContent = names[i];
+    nick.textContent = names[i];
+  }, 1500);
+
+  /* ---------- BUTTON LOGIC ---------- */
   const yesBtn = document.getElementById("yesBtn");
   const noBtn = document.getElementById("noBtn");
   const zone = document.getElementById("zone");
@@ -264,8 +283,10 @@
   const story = document.getElementById("story");
   const spotify = document.getElementById("spotify");
 
-  const confettiCanvas = document.getElementById("confettiCanvas");
-  const confettiInstance = confetti.create(confettiCanvas, { resize:true });
+  const confettiInstance = confetti.create(
+    document.getElementById("confettiCanvas"),
+    { resize:true }
+  );
 
   let yesScale = 1;
   function growYes(){
@@ -278,29 +299,20 @@
   function moveNo(px,py){
     const z = zone.getBoundingClientRect();
     const b = noBtn.getBoundingClientRect();
-
     let dx = (b.left+b.width/2)-px;
     let dy = (b.top+b.height/2)-py;
     let mag = Math.hypot(dx,dy)||1;
     dx/=mag; dy/=mag;
-
-    let left = (b.left-z.left)+dx*160;
-    let top  = (b.top-z.top)+dy*160;
-
-    noBtn.style.left = clamp(left,0,z.width-b.width)+"px";
-    noBtn.style.top  = clamp(top,0,z.height-b.height)+"px";
+    noBtn.style.left = clamp((b.left-z.left)+dx*160,0,z.width-b.width)+"px";
+    noBtn.style.top  = clamp((b.top-z.top)+dy*160,0,z.height-b.height)+"px";
     noBtn.style.transform="none";
-
     growYes();
   }
 
   zone.addEventListener("pointermove",e=>{
     const b=noBtn.getBoundingClientRect();
-    const d=Math.hypot(
-      (b.left+b.width/2)-e.clientX,
-      (b.top+b.height/2)-e.clientY
-    );
-    if(d<140) moveNo(e.clientX,e.clientY);
+    if(Math.hypot((b.left+b.width/2)-e.clientX,(b.top+b.height/2)-e.clientY)<140)
+      moveNo(e.clientX,e.clientY);
   });
 
   noBtn.onclick = e => e.preventDefault();
@@ -313,9 +325,8 @@
     confettiInstance({particleCount:220,spread:140});
   };
 
-  storyBtn.onclick = () => {
+  storyBtn.onclick = () =>
     story.style.display = story.style.display==="block"?"none":"block";
-  };
 
   musicBtn.onclick = () => {
     const open = spotify.style.display==="block";
