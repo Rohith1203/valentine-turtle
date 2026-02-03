@@ -64,13 +64,6 @@
       filter:blur(6px);
     }
 
-    .art{
-      width:min(260px,80vw);
-      margin:0 auto 10px;
-      display:block;
-      filter:drop-shadow(0 10px 14px rgba(0,0,0,.12));
-    }
-
     h1{
       font-size:clamp(26px,4vw,44px);
       margin:12px 0 10px;
@@ -126,10 +119,10 @@
       margin-top:18px;
       animation:pop .35s ease;
     }
+
+    /* ✅ This keeps content readable and prevents "feels like bottom" jump */
     .result h2{
-      font-size:clamp(28px,4.2vw,44px);
-      margin:10px 0 8px;
-      line-height:1.12;
+      margin:10px 0 12px;
     }
 
     .chips{
@@ -139,6 +132,7 @@
       flex-wrap:wrap;
       margin:14px 0 10px;
     }
+
     .chipbtn{
       position:static;
       transform:none;
@@ -146,11 +140,11 @@
       font-size:14px;
       font-weight:900;
       border-radius:999px;
-      box-shadow:none;
       border:1px solid var(--line);
       background:rgba(255,255,255,.6);
       cursor:pointer;
     }
+
     .chipbtn.primary{
       background:rgba(255,59,122,.14);
       border-color:rgba(255,59,122,.22);
@@ -161,61 +155,20 @@
       display:none;
       margin:12px auto 0;
       width:min(620px,94%);
-      padding:14px 14px;
+      padding:14px;
       border-radius:16px;
       background:rgba(255,255,255,.62);
       border:1px solid rgba(0,0,0,.06);
       text-align:left;
       line-height:1.55;
       font-size:15px;
-      animation:pop .25s ease;
     }
 
-    .quoteTitle{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      margin:0 0 10px;
-      padding-bottom:10px;
-      border-bottom:1px dashed rgba(17,24,39,.14);
-    }
-    .badge{
-      font-weight:900;
-      padding:4px 10px;
-      border-radius:999px;
-      background:rgba(255,59,122,.12);
-      color:#7a0d2e;
-      font-size:12px;
-      letter-spacing:.3px;
-      white-space:nowrap;
-    }
-
-    .dialogue{display:grid;gap:10px;margin-top:10px;}
-    .line{
-      display:grid;
-      gap:6px;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(17,24,39,.08);
-      background:rgba(255,255,255,.55);
-    }
-    .who{
-      font-weight:950;
-      font-size:13px;
-      letter-spacing:.2px;
-      opacity:.85;
-      display:flex;
-      gap:8px;
-      align-items:center;
-    }
-    .who .emoji{font-size:16px}
-    .say{font-size:15px;opacity:.95;}
-
-    /* Spotify starts hidden; shown on YES or via toggle button */
+    /* ✅ Start hidden; user can open with button */
     .spotify{
       display:none;
       width:min(560px,94%);
-      margin:12px auto 0;
+      margin:14px auto 0; /* a bit more breathing room */
       border-radius:14px;
       overflow:hidden;
       border:1px solid rgba(0,0,0,.08);
@@ -230,76 +183,28 @@
 
     .fireworks{
       width:min(360px,90vw);
-      margin:10px auto 0;
+      margin:14px auto 0;
       display:block;
       border-radius:14px;
     }
 
-    #turtle{
-      position:fixed;
-      left:0; top:0;
-      transform:translate(-999px,-999px);
-      pointer-events:none;
-      z-index:5;
-      font-size:22px;
-      filter:drop-shadow(0 6px 10px rgba(0,0,0,.14));
-      transition:transform .04s linear;
+    @keyframes pop{
+      from{transform:scale(.96);opacity:0;}
+      to{transform:scale(1);opacity:1;}
     }
-
-    @keyframes pop{from{transform:scale(.96);opacity:0;}to{transform:scale(1);opacity:1;}}
   </style>
 </head>
 
 <body>
   <canvas id="confettiCanvas"></canvas>
-  <div id="turtle" aria-hidden="true">🐢</div>
 
-  <main class="card">
+  <main class="card" id="card">
     <div class="float"></div>
 
-    <svg class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="fur" x1="0" x2="1">
-          <stop offset="0" stop-color="#f7c7a1"/>
-          <stop offset="1" stop-color="#f2a97b"/>
-        </linearGradient>
-        <linearGradient id="heart" x1="0" x2="1">
-          <stop offset="0" stop-color="#ff4d7d"/>
-          <stop offset="1" stop-color="#ff1f68"/>
-        </linearGradient>
-      </defs>
-
-      <path d="M250 50 C250 33 270 25 282 38
-               C294 25 314 33 314 50
-               C314 78 282 92 282 106
-               C282 92 250 78 250 50Z"
-            fill="url(#heart)"/>
-
-      <path d="M90 120 C90 70 140 40 190 60
-               C240 40 290 70 290 120
-               C290 180 240 210 190 210
-               C140 210 90 180 90 120Z"
-            fill="url(#fur)"/>
-
-      <path d="M110 92 L95 55 L140 78 Z" fill="#f2a97b"/>
-      <path d="M270 92 L285 55 L240 78 Z" fill="#f2a97b"/>
-
-      <circle cx="160" cy="130" r="8"/>
-      <circle cx="220" cy="130" r="8"/>
-
-      <path d="M190 144 C186 144 182 148 182 152
-               C182 160 190 164 190 170
-               C190 164 198 160 198 152
-               C198 148 194 144 190 144Z"
-            fill="#ff7aa2"/>
-    </svg>
-
-    <h1>
-      <span id="nameLine">Cutuu turtle</span>, will you be my Valentine?
-    </h1>
+    <h1>Cutuu turtle, will you be my Valentine?</h1>
 
     <p class="sub">
-      (aka <span class="nick" id="nick">Vidd</span>) ✨
+      (aka <span class="nick">Vidd / Vidhu / Tippy Turtle</span>) ✨
     </p>
 
     <section class="button-zone" id="zone">
@@ -310,60 +215,31 @@
     <div class="hint" id="hint">“No” seems a bit shy 😈</div>
 
     <section class="result" id="result">
-      <h2>
-        Yayyy Vidhuuu 🐢💖<br>
-        Valentine unlocked ✨
-      </h2>
+      <h2>Valentine unlocked 🐢💖</h2>
 
       <div class="chips">
-        <button class="chipbtn primary" id="poemBtn" type="button">A tiny story 🌙</button>
+        <button class="chipbtn primary" id="storyBtn" type="button">A tiny story 🌙</button>
         <button class="chipbtn" id="musicBtn" type="button">Play our vibe 🎶</button>
-        <button class="chipbtn" id="moreConfettiBtn" type="button">More confetti 🎉</button>
       </div>
 
-      <div class="panel" id="poemPanel">
-        <div class="quoteTitle">
-          <span class="badge">FOR VIDHI</span>
-          <div style="font-weight:950; letter-spacing:.2px;">They all asked me the same thing…</div>
-        </div>
+      <div class="panel" id="story">
+        🌇 <b>Sunset</b> asked if it was the prettiest thing I’d seen —  
+        I said her eyes are prettier.<br><br>
 
-        <div class="dialogue">
-          <div class="line">
-            <div class="who"><span class="emoji">🌇</span>Sunset</div>
-            <div class="say">“Am I the prettiest thing you’ve ever seen?”</div>
-            <div class="say"><b>Me:</b> “Sorry — her eyes are prettier.”</div>
-          </div>
+        🌙 <b>Moonlight</b> asked if it shined the softest —  
+        I said her eyes shine softer.<br><br>
 
-          <div class="line">
-            <div class="who"><span class="emoji">🌙</span>Moonlight</div>
-            <div class="say">“Do I shine the softest?”</div>
-            <div class="say"><b>Me:</b> “Sorry — her eyes shine softer.”</div>
-          </div>
+        🌊 <b>Ocean</b> asked if it held the deepest secrets —  
+        I said her eyes hold deeper ones.<br><br>
 
-          <div class="line">
-            <div class="who"><span class="emoji">🌊</span>Ocean</div>
-            <div class="say">“Do I hold the deepest secrets?”</div>
-            <div class="say"><b>Me:</b> “Hey — her eyes hold deeper secrets than you.”</div>
-          </div>
+        🌧️ <b>Rain</b> asked if it poured the most emotion —  
+        not today, I said.<br><br>
 
-          <div class="line">
-            <div class="who"><span class="emoji">🌧️</span>Rain</div>
-            <div class="say">“Do I pour the most emotion?”</div>
-            <div class="say"><b>Me:</b> “Not today — her eyes pour more emotion.”</div>
-          </div>
+        🌌 <b>Skies</b> asked if it was heaven —  
+        beautiful, but I’ve already seen it in her eyes.<br><br>
 
-          <div class="line">
-            <div class="who"><span class="emoji">🌌</span>Skies</div>
-            <div class="say">“Am I your idea of heaven?”</div>
-            <div class="say"><b>Me:</b> “Beautiful — but I’ve already seen heaven in her eyes.”</div>
-          </div>
-
-          <div class="line">
-            <div class="who"><span class="emoji">🤫</span>Silence</div>
-            <div class="say">“Am I the loudest thing in the room?”</div>
-            <div class="say"><b>Me:</b> “Sorry — her silence speaks louder.”</div>
-          </div>
-        </div>
+        🤫 <b>Silence</b> asked if it spoke the loudest —  
+        I smiled. Her silence does.
 
         <div class="footerNote">
           If you’re reading this, Vidhi… yes, it’s you. 🐢<br>
@@ -371,15 +247,13 @@
         </div>
       </div>
 
-      <!-- Cigarettes After Sex vibe: "Apocalypse" -->
-      <div class="spotify" id="spotifyBox" aria-label="Spotify player">
+      <div class="spotify" id="spotify">
         <iframe
-          title="Cigarettes After Sex - Apocalypse"
-          style="border-radius:14px"
-          src="https://open.spotify.com/embed/track/0yc6Gst2xkRu0eMLeRMGCX?utm_source=generator"
+          title="Cigarettes After Sex - Nothing's Gonna Hurt You Baby"
+          src="https://open.spotify.com/embed/track/3G6hD9B2ZHOsgf4WfNu7X1?utm_source=generator"
           width="100%"
           height="152"
-          frameBorder="0"
+          frameborder="0"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
         </iframe>
       </div>
@@ -393,183 +267,56 @@
   </main>
 
   <script>
-    const zone = document.getElementById("zone");
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
+    const zone = document.getElementById("zone");
     const result = document.getElementById("result");
     const hint = document.getElementById("hint");
-    const confettiCanvas = document.getElementById("confettiCanvas");
 
-    const nickEl = document.getElementById("nick");
-    const nameLine = document.getElementById("nameLine");
-
-    const poemBtn = document.getElementById("poemBtn");
-    const poemPanel = document.getElementById("poemPanel");
+    const storyBtn = document.getElementById("storyBtn");
+    const story = document.getElementById("story");
     const musicBtn = document.getElementById("musicBtn");
-    const spotifyBox = document.getElementById("spotifyBox");
-    const moreConfettiBtn = document.getElementById("moreConfettiBtn");
+    const spotify = document.getElementById("spotify");
 
-    // nickname rotator
-    const nicks = ["Vidd", "Vidhu", "Tippy Turtle", "Cutuu Turtle"];
-    let i = 0;
-    setInterval(() => {
-      i = (i + 1) % nicks.length;
-      nickEl.textContent = nicks[i];
-      nameLine.textContent = nicks[(i + 2) % nicks.length];
-    }, 1500);
+    const confettiCanvas = document.getElementById("confettiCanvas");
+    const confettiInstance = confetti.create(confettiCanvas, { resize:true });
 
-    // confetti setup
-    function resizeConfettiCanvas() {
-      const dpr = Math.max(1, window.devicePixelRatio || 1);
-      confettiCanvas.width = Math.floor(window.innerWidth * dpr);
-      confettiCanvas.height = Math.floor(window.innerHeight * dpr);
-      confettiCanvas.style.width = "100vw";
-      confettiCanvas.style.height = "100vh";
-    }
-    resizeConfettiCanvas();
-    window.addEventListener("resize", resizeConfettiCanvas);
-    window.addEventListener("orientationchange", () => setTimeout(resizeConfettiCanvas, 150));
-
-    const confettiInstance = confetti.create(confettiCanvas, {
-      resize: false,
-      useWorker: true
-    });
-
-    function fullScreenConfetti() {
-      const end = Date.now() + 1600;
-
-      (function frame() {
-        confettiInstance({
-          particleCount: 12,
-          spread: 90,
-          startVelocity: 45,
-          ticks: 180,
-          origin: { x: Math.random(), y: Math.random() * 0.3 }
-        });
-        if (Date.now() < end) requestAnimationFrame(frame);
-      })();
-
-      setTimeout(() => {
-        confettiInstance({
-          particleCount: 260,
-          spread: 140,
-          startVelocity: 60,
-          ticks: 220,
-          origin: { x: 0.5, y: 0.55 }
-        });
-      }, 300);
-    }
-
-    // "No" moves away
-    let yesScale = 1;
-    function growYes() {
-      yesScale = Math.min(2.2, yesScale + 0.1);
-      yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
-    }
-    function clamp(n, min, max) {
-      return Math.max(min, Math.min(max, n));
-    }
-    function moveNo(px, py) {
-      const z = zone.getBoundingClientRect();
-      const b = noBtn.getBoundingClientRect();
-
-      let dx = (b.left + b.width / 2) - px;
-      let dy = (b.top + b.height / 2) - py;
-      let mag = Math.hypot(dx, dy) || 1;
-      dx /= mag;
-      dy /= mag;
-
-      let newLeft = (b.left - z.left) + dx * 150;
-      let newTop  = (b.top - z.top) + dy * 150;
-
-      newLeft = clamp(newLeft, 0, z.width - b.width);
-      newTop  = clamp(newTop, 0, z.height - b.height);
-
-      noBtn.style.left = newLeft + "px";
-      noBtn.style.top = newTop + "px";
-      noBtn.style.transform = "none";
-
-      growYes();
-    }
-
-    zone.addEventListener("pointermove", e => {
-      const b = noBtn.getBoundingClientRect();
-      const d = Math.hypot(
-        (b.left + b.width / 2) - e.clientX,
-        (b.top + b.height / 2) - e.clientY
-      );
-      if (d < 140) moveNo(e.clientX, e.clientY);
-    });
-
-    noBtn.addEventListener("click", e => e.preventDefault());
-
-    // ✅ YES flow: show story + show music + scroll to music (feels automatic)
-    yesBtn.addEventListener("click", () => {
-      document.title = "Vidhi 💖 Valentine";
+    // ✅ No auto-scroll anywhere. Keeps the top readable.
+    yesBtn.onclick = () => {
       zone.style.display = "none";
       hint.style.display = "none";
       result.style.display = "block";
 
-      resizeConfettiCanvas();
-      fullScreenConfetti();
+      // show story by default (same as your earlier vibe)
+      story.style.display = "block";
 
-      poemPanel.style.display = "block";
-      spotifyBox.style.display = "block";
-      musicBtn.textContent = "Now playing our vibe 🎶";
+      // keep music hidden until she taps "Play our vibe"
+      spotify.style.display = "none";
+      musicBtn.textContent = "Play our vibe 🎶";
 
-      setTimeout(() => {
-        spotifyBox.scrollIntoView({ behavior: "smooth", block: "center" });
-      }, 400);
-    });
+      confettiInstance({ particleCount: 200, spread: 140 });
+    };
 
     // story toggle
-    poemBtn.addEventListener("click", () => {
-      poemPanel.style.display = (poemPanel.style.display === "block") ? "none" : "block";
-      if (poemPanel.style.display === "block") {
-        poemPanel.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    });
+    storyBtn.onclick = () => {
+      story.style.display = (story.style.display === "block") ? "none" : "block";
+    };
 
-    // ✅ music toggle
-    musicBtn.addEventListener("click", () => {
-      const isOpen = spotifyBox.style.display === "block";
-      if (isOpen) {
-        spotifyBox.style.display = "none";
+    // music toggle (optional scroll ONLY when opening music, and not to bottom)
+    musicBtn.onclick = () => {
+      const open = spotify.style.display === "block";
+      if (open) {
+        spotify.style.display = "none";
         musicBtn.textContent = "Play our vibe 🎶";
       } else {
-        spotifyBox.style.display = "block";
-        musicBtn.textContent = "Now playing our vibe 🎶";
-        spotifyBox.scrollIntoView({ behavior: "smooth", block: "center" });
+        spotify.style.display = "block";
+        musicBtn.textContent = "Hide our vibe 🙈";
+        // gentle scroll just to the player, not bottom-jumpy
+        spotify.scrollIntoView({ behavior:"smooth", block:"nearest" });
       }
-    });
+    };
 
-    // extra confetti
-    moreConfettiBtn.addEventListener("click", () => {
-      confettiInstance({
-        particleCount: 180,
-        spread: 120,
-        startVelocity: 55,
-        ticks: 220,
-        origin: { x: 0.5, y: 0.6 }
-      });
-    });
-
-    // turtle follower
-    const turtle = document.getElementById("turtle");
-    let lastMove = 0;
-
-    function moveTurtle(x, y) {
-      turtle.style.transform = `translate(${x + 10}px, ${y + 10}px)`;
-    }
-
-    document.addEventListener("pointermove", (e) => {
-      const now = performance.now();
-      if (now - lastMove < 12) return;
-      lastMove = now;
-      moveTurtle(e.clientX, e.clientY);
-    }, { passive: true });
-
-    document.addEventListener("pointerdown", (e) => moveTurtle(e.clientX, e.clientY), { passive: true });
+    noBtn.onclick = e => e.preventDefault();
   </script>
 </body>
 </html>
