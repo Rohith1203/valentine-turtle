@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Vidhu 🐢💖</title>
 
+  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -15,8 +16,8 @@
       --yes:#ff3b7a;
       --yesHover:#ff1f68;
       --ink:#111827;
-      --line:rgba(17,24,39,.10);
     }
+
     *{box-sizing:border-box}
 
     body{
@@ -48,52 +49,27 @@
       border-radius:22px;
       text-align:center;
       box-shadow:0 18px 60px rgba(0,0,0,.15);
-      position:relative;
-      overflow:hidden;
     }
 
-    .float{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      opacity:.22;
-      background:
-        radial-gradient(circle at 20% 30%, rgba(255,59,122,.35), transparent 35%),
-        radial-gradient(circle at 75% 20%, rgba(255,31,104,.30), transparent 32%),
-        radial-gradient(circle at 60% 80%, rgba(255,59,122,.20), transparent 36%);
-      filter:blur(6px);
-    }
-
-    /* cat on the starting page */
     .catwrap{
       width:min(260px,80vw);
-      margin:6px auto 8px;
+      margin:6px auto 12px;
       border-radius:18px;
       overflow:hidden;
       box-shadow:0 10px 30px rgba(0,0,0,.12);
-      border:1px solid rgba(0,0,0,.06);
       background:rgba(255,255,255,.6);
     }
-    .catwrap img{display:block;width:100%;height:auto}
+    .catwrap img{width:100%;display:block}
 
     h1{
       font-size:clamp(26px,4vw,44px);
-      margin:12px 0 10px;
-      line-height:1.08;
+      margin:12px 0 14px;
     }
 
     .sub{
-      margin:0 0 16px;
       font-size:14px;
-      opacity:.78;
-    }
-    .nick{
-      display:inline-block;
-      padding:4px 10px;
-      border-radius:999px;
-      background:rgba(255,59,122,.12);
-      font-weight:800;
-      letter-spacing:.2px;
+      opacity:.75;
+      margin-bottom:18px;
     }
 
     .button-zone{
@@ -116,15 +92,18 @@
       cursor:pointer;
       box-shadow:0 10px 24px rgba(0,0,0,.14);
       user-select:none;
-      -webkit-tap-highlight-color:transparent;
       transition:transform .12s ease, background .12s ease;
     }
 
     #yesBtn{left:18%;background:var(--yes);color:#fff;}
     #yesBtn:hover{background:var(--yesHover);}
-    #noBtn{left:62%;background:#e5e7eb;color:#111827;}
+    #noBtn{left:62%;background:#e5e7eb;color:#111827;will-change:left,top;}
 
-    .hint{margin-top:10px;font-size:13px;opacity:.7;}
+    .hint{
+      margin-top:10px;
+      font-size:13px;
+      opacity:.7;
+    }
 
     .result{
       display:none;
@@ -136,26 +115,17 @@
       display:flex;
       gap:10px;
       justify-content:center;
+      margin:12px 0;
       flex-wrap:wrap;
-      margin:14px 0 10px;
     }
 
     .chipbtn{
-      position:static;
-      transform:none;
       padding:10px 14px;
-      font-size:14px;
-      font-weight:900;
       border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.6);
+      border:none;
+      font-weight:800;
       cursor:pointer;
-    }
-
-    .chipbtn.primary{
-      background:rgba(255,59,122,.14);
-      border-color:rgba(255,59,122,.22);
-      color:#7a0d2e;
+      background:rgba(255,59,122,.15);
     }
 
     .panel{
@@ -164,11 +134,8 @@
       width:min(620px,94%);
       padding:14px;
       border-radius:16px;
-      background:rgba(255,255,255,.62);
-      border:1px solid rgba(0,0,0,.06);
-      text-align:left;
+      background:rgba(255,255,255,.65);
       line-height:1.55;
-      font-size:15px;
     }
 
     .spotify{
@@ -177,14 +144,6 @@
       margin:14px auto 0;
       border-radius:14px;
       overflow:hidden;
-      border:1px solid rgba(0,0,0,.08);
-      background:rgba(255,255,255,.5);
-    }
-
-    .footerNote{
-      margin-top:12px;
-      opacity:.8;
-      font-size:13px;
     }
 
     .fireworks{
@@ -202,144 +161,132 @@
 </head>
 
 <body>
-  <canvas id="confettiCanvas"></canvas>
+<canvas id="confettiCanvas"></canvas>
 
-  <main class="card">
-    <div class="float"></div>
+<main class="card">
 
-    <!-- ✅ Your base64 cat image on the front page -->
-    <div class="catwrap" id="catwrap" aria-label="cute cat">
-      <img
-        alt="cute cat"
-        src="data:image/jpeg;base64,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"
-      />
+  <!-- Animated cat -->
+  <div class="catwrap">
+    <img
+      alt="muah cat kiss"
+      src="https://media.giphy.com/media/ytu2GUYbvhz7zShGwS/giphy.gif"
+    />
+  </div>
+
+  <h1>Cutuu Turtle, will you be my Valentine?</h1>
+  <p class="sub">(aka Vidhu 🐢)</p>
+
+  <section class="button-zone" id="zone">
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+  </section>
+
+  <div class="hint" id="hint">“No” seems a bit shy 😈</div>
+
+  <section class="result" id="result">
+    <h2>Valentine unlocked 🐢💖</h2>
+
+    <div class="chips">
+      <button class="chipbtn" id="storyBtn">A tiny story 🌙</button>
+      <button class="chipbtn" id="musicBtn">Play our vibe 🎶</button>
     </div>
 
-    <h1>
-      <span id="nameLine">Cutuu turtle</span>, will you be my Valentine?
-    </h1>
+    <div class="panel" id="story">
+      🌙 I looked at the world — then I looked at you.<br><br>
+      Somehow, everything felt softer, quieter, safer.<br><br>
+      If love had a sound… it would play gently in the background,
+      promising that nothing’s gonna hurt you, baby. 🐢💗
+    </div>
 
-    <p class="sub">
-      (aka <span class="nick" id="nick">Vidd</span>) ✨
-    </p>
+    <div class="spotify" id="spotify">
+      <iframe
+        title="Nothing's Gonna Hurt You Baby - Cigarettes After Sex"
+        src="https://open.spotify.com/embed/track/3G6hD9B2ZHOsgf4WfNu7X1"
+        width="100%"
+        height="152"
+        frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+      </iframe>
+    </div>
 
-    <section class="button-zone" id="zone">
-      <button id="yesBtn">Yes</button>
-      <button id="noBtn">No</button>
-    </section>
+    <img
+      class="fireworks"
+      src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
+      alt="Fireworks"
+    />
+  </section>
+</main>
 
-    <div class="hint" id="hint">“No” seems a bit shy 😈</div>
+<script>
+  const yesBtn = document.getElementById("yesBtn");
+  const noBtn = document.getElementById("noBtn");
+  const zone = document.getElementById("zone");
+  const result = document.getElementById("result");
+  const hint = document.getElementById("hint");
+  const storyBtn = document.getElementById("storyBtn");
+  const musicBtn = document.getElementById("musicBtn");
+  const story = document.getElementById("story");
+  const spotify = document.getElementById("spotify");
 
-    <section class="result" id="result">
-      <h2>Valentine unlocked 🐢💖</h2>
+  const confettiCanvas = document.getElementById("confettiCanvas");
+  const confettiInstance = confetti.create(confettiCanvas, { resize:true });
 
-      <div class="chips">
-        <button class="chipbtn primary" id="storyBtn" type="button">A tiny story 🌙</button>
-        <button class="chipbtn" id="musicBtn" type="button">Play our vibe 🎶</button>
-      </div>
+  // YES grows
+  let yesScale = 1;
+  function growYes(){
+    yesScale = Math.min(2.2, yesScale + 0.08);
+    yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
+  }
 
-      <div class="panel" id="story">
-        🌇 <b>Sunset</b> asked if it was the prettiest thing I’d seen —
-        I said her eyes are prettier.<br><br>
+  function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
 
-        🌙 <b>Moonlight</b> asked if it shined the softest —
-        I said her eyes shine softer.<br><br>
+  function moveNo(px,py){
+    const z = zone.getBoundingClientRect();
+    const b = noBtn.getBoundingClientRect();
 
-        🌊 <b>Ocean</b> asked if it held the deepest secrets —
-        I said her eyes hold deeper ones.<br><br>
+    let dx = (b.left+b.width/2)-px;
+    let dy = (b.top+b.height/2)-py;
+    let mag = Math.hypot(dx,dy)||1;
+    dx/=mag; dy/=mag;
 
-        🌧️ <b>Rain</b> asked if it poured the most emotion —
-        not today, I said.<br><br>
+    let left = (b.left-z.left)+dx*160;
+    let top  = (b.top-z.top)+dy*160;
 
-        🌌 <b>Skies</b> asked if it was heaven —
-        beautiful, but I’ve already seen it in her eyes.<br><br>
+    noBtn.style.left = clamp(left,0,z.width-b.width)+"px";
+    noBtn.style.top  = clamp(top,0,z.height-b.height)+"px";
+    noBtn.style.transform="none";
 
-        🤫 <b>Silence</b> asked if it spoke the loudest —
-        I smiled. Her silence does.
+    growYes();
+  }
 
-        <div class="footerNote">
-          If you’re reading this, Vidhi… yes, it’s you. 🐢<br>
-          The one who makes ordinary moments feel quietly special.
-        </div>
-      </div>
+  zone.addEventListener("pointermove",e=>{
+    const b=noBtn.getBoundingClientRect();
+    const d=Math.hypot(
+      (b.left+b.width/2)-e.clientX,
+      (b.top+b.height/2)-e.clientY
+    );
+    if(d<140) moveNo(e.clientX,e.clientY);
+  });
 
-      <div class="spotify" id="spotify">
-        <iframe
-          title="Cigarettes After Sex - Nothing's Gonna Hurt You Baby"
-          src="https://open.spotify.com/embed/track/3G6hD9B2ZHOsgf4WfNu7X1?utm_source=generator"
-          width="100%"
-          height="152"
-          frameborder="0"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-        </iframe>
-      </div>
+  noBtn.onclick = e => e.preventDefault();
 
-      <img
-        class="fireworks"
-        src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
-        alt="Fireworks"
-      />
-    </section>
-  </main>
+  yesBtn.onclick = () => {
+    zone.style.display="none";
+    hint.style.display="none";
+    result.style.display="block";
+    story.style.display="block";
+    confettiInstance({particleCount:220,spread:140});
+  };
 
-  <script>
-    const yesBtn = document.getElementById("yesBtn");
-    const noBtn = document.getElementById("noBtn");
-    const zone = document.getElementById("zone");
-    const result = document.getElementById("result");
-    const hint = document.getElementById("hint");
+  storyBtn.onclick = () => {
+    story.style.display = story.style.display==="block"?"none":"block";
+  };
 
-    const nameLine = document.getElementById("nameLine");
-    const nickEl = document.getElementById("nick");
-
-    const storyBtn = document.getElementById("storyBtn");
-    const story = document.getElementById("story");
-    const musicBtn = document.getElementById("musicBtn");
-    const spotify = document.getElementById("spotify");
-
-    const confettiCanvas = document.getElementById("confettiCanvas");
-    const confettiInstance = confetti.create(confettiCanvas, { resize:true });
-
-    // ✅ rotating single "aka" name + headline changes
-    const nicks = ["Vidd", "Vidhu", "Tippy Turtle", "Cutuu Turtle"];
-    let i = 0;
-    setInterval(() => {
-      i = (i + 1) % nicks.length;
-      nickEl.textContent = nicks[i];
-      nameLine.textContent = nicks[(i + 2) % nicks.length];
-    }, 1500);
-
-    // ✅ No auto-scroll
-    yesBtn.onclick = () => {
-      zone.style.display = "none";
-      hint.style.display = "none";
-
-      result.style.display = "block";
-      story.style.display = "block";
-
-      spotify.style.display = "none";
-      musicBtn.textContent = "Play our vibe 🎶";
-
-      confettiInstance({ particleCount: 200, spread: 140 });
-    };
-
-    storyBtn.onclick = () => {
-      story.style.display = (story.style.display === "block") ? "none" : "block";
-    };
-
-    musicBtn.onclick = () => {
-      const open = spotify.style.display === "block";
-      if (open) {
-        spotify.style.display = "none";
-        musicBtn.textContent = "Play our vibe 🎶";
-      } else {
-        spotify.style.display = "block";
-        musicBtn.textContent = "Hide our vibe 🙈";
-        spotify.scrollIntoView({ behavior:"smooth", block:"nearest" });
-      }
-    };
-
-    noBtn.onclick = e => e.preventDefault();
-  </script>
+  musicBtn.onclick = () => {
+    const open = spotify.style.display==="block";
+    spotify.style.display = open?"none":"block";
+    musicBtn.textContent = open?"Play our vibe 🎶":"Hide our vibe 🙈";
+  };
+</script>
 </body>
 </html>
