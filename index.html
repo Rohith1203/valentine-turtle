@@ -8,218 +8,248 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
-    :root {
-      --bg1: #ffd6e7;
-      --bg2: #ffeef6;
-      --card: #ffffffcc;
-      --yes: #ff3b7a;
-      --yesHover: #ff1f68;
-      --soft: #ff7aa2;
-      --text: #111827;
+    :root{
+      --bg1:#ffd6e7;
+      --bg2:#ffeef6;
+      --card:#ffffffcc;
+      --yes:#ff3b7a;
+      --yesHover:#ff1f68;
+      --ink:#111827;
+      --soft:#ff7aa2;
+      --line:rgba(17,24,39,.10);
+    }
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100svh;
+      display:grid;
+      place-items:center;
+      padding:16px;
+      overflow:hidden;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      color:var(--ink);
+      background:radial-gradient(circle at top,var(--bg2),var(--bg1));
     }
 
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100svh;
-      display: grid;
-      place-items: center;
-      background: radial-gradient(circle at top, var(--bg2), var(--bg1));
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      overflow: hidden;
-      padding: 16px;
-      color: var(--text);
+    #confettiCanvas{
+      position:fixed;
+      inset:0;
+      width:100vw;
+      height:100vh;
+      pointer-events:none;
+      z-index:9999;
     }
 
-    #confettiCanvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
+    .card{
+      width:min(780px,94vw);
+      padding:26px 22px;
+      background:var(--card);
+      backdrop-filter:blur(10px);
+      border-radius:22px;
+      text-align:center;
+      box-shadow:0 18px 60px rgba(0,0,0,.15);
+      position:relative;
+      overflow:hidden;
     }
 
-    .card {
-      width: min(760px, 94vw);
-      padding: 26px 22px;
-      background: var(--card);
-      backdrop-filter: blur(10px);
-      border-radius: 22px;
-      text-align: center;
-      box-shadow: 0 18px 60px rgba(0,0,0,.15);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .art {
-      width: min(260px, 80vw);
-      margin: 0 auto 10px;
-      display: block;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,.12));
-    }
-
-    h1 {
-      font-size: clamp(26px, 4vw, 44px);
-      margin: 12px 0 10px;
-      line-height: 1.08;
-    }
-
-    .sub {
-      margin: 0 0 16px;
-      font-size: 14px;
-      opacity: .75;
-    }
-
-    .nick {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(255,59,122,.12);
-      font-weight: 800;
-      letter-spacing: .2px;
-    }
-
-    .button-zone {
-      position: relative;
-      width: min(520px, 92%);
-      height: 150px;
-      margin: 0 auto;
-      touch-action: none;
-    }
-
-    button {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 16px 24px;
-      font-size: 18px;
-      font-weight: 800;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 10px 24px rgba(0,0,0,.14);
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform .12s ease, background .12s ease;
-    }
-
-    #yesBtn {
-      left: 18%;
-      background: var(--yes);
-      color: #fff;
-    }
-    #yesBtn:hover { background: var(--yesHover); }
-
-    #noBtn {
-      left: 62%;
-      background: #e5e7eb;
-      color: #111827;
-    }
-
-    .hint {
-      margin-top: 10px;
-      font-size: 13px;
-      opacity: .7;
-    }
-
-    .result {
-      display: none;
-      margin-top: 18px;
-      animation: pop .35s ease;
-    }
-
-    .result h2 {
-      font-size: clamp(28px, 4.2vw, 44px);
-      margin: 10px 0 8px;
-      line-height: 1.12;
-    }
-
-    .chips {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin: 14px 0 10px;
-    }
-
-    .chipbtn {
-      position: static;
-      transform: none;
-      padding: 10px 14px;
-      font-size: 14px;
-      box-shadow: none;
-      border: 1px solid rgba(0,0,0,.08);
-      background: rgba(255,255,255,.6);
-      cursor: pointer;
-    }
-    .chipbtn.primary {
-      background: rgba(255,59,122,.14);
-      border-color: rgba(255,59,122,.22);
-      color: #7a0d2e;
-      font-weight: 900;
-    }
-
-    .note {
-      display: none;
-      margin: 12px auto 0;
-      width: min(560px, 94%);
-      padding: 14px 14px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.62);
-      border: 1px solid rgba(0,0,0,.06);
-      text-align: left;
-      line-height: 1.5;
-      font-size: 15px;
-      animation: pop .25s ease;
-    }
-
-    .spotify {
-      width: min(560px, 94%);
-      margin: 12px auto 0;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(0,0,0,.08);
-      background: rgba(255,255,255,.5);
-    }
-
-    .fireworks {
-      width: min(360px, 90vw);
-      margin: 10px auto 0;
-      display: block;
-      border-radius: 14px;
-    }
-
-    @keyframes pop {
-      from { transform: scale(.96); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    /* tiny floating hearts (subtle) */
-    .float {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      opacity: .22;
+    .float{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:.22;
       background:
         radial-gradient(circle at 20% 30%, rgba(255,59,122,.35), transparent 35%),
         radial-gradient(circle at 75% 20%, rgba(255,31,104,.30), transparent 32%),
         radial-gradient(circle at 60% 80%, rgba(255,59,122,.20), transparent 36%);
-      filter: blur(6px);
+      filter:blur(6px);
     }
 
-    /* turtle follower */
-    #turtle {
-      position: fixed;
-      left: 0;
-      top: 0;
-      transform: translate(-999px, -999px);
-      pointer-events: none;
-      z-index: 5;
-      font-size: 22px;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,.14));
-      transition: transform .04s linear;
+    .art{
+      width:min(260px,80vw);
+      margin:0 auto 10px;
+      display:block;
+      filter:drop-shadow(0 10px 14px rgba(0,0,0,.12));
+    }
+
+    h1{
+      font-size:clamp(26px,4vw,44px);
+      margin:12px 0 10px;
+      line-height:1.08;
+    }
+
+    .sub{
+      margin:0 0 16px;
+      font-size:14px;
+      opacity:.78;
+    }
+    .nick{
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(255,59,122,.12);
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .button-zone{
+      position:relative;
+      width:min(520px,92%);
+      height:150px;
+      margin:0 auto;
+      touch-action:none;
+    }
+
+    button{
+      position:absolute;
+      top:50%;
+      transform:translateY(-50%);
+      padding:16px 24px;
+      font-size:18px;
+      font-weight:800;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      box-shadow:0 10px 24px rgba(0,0,0,.14);
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+      transition:transform .12s ease, background .12s ease;
+    }
+
+    #yesBtn{left:18%;background:var(--yes);color:#fff;}
+    #yesBtn:hover{background:var(--yesHover);}
+    #noBtn{left:62%;background:#e5e7eb;color:#111827;}
+
+    .hint{margin-top:10px;font-size:13px;opacity:.7;}
+
+    .result{
+      display:none;
+      margin-top:18px;
+      animation:pop .35s ease;
+    }
+    .result h2{
+      font-size:clamp(28px,4.2vw,44px);
+      margin:10px 0 8px;
+      line-height:1.12;
+    }
+
+    .chips{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin:14px 0 10px;
+    }
+    .chipbtn{
+      position:static;
+      transform:none;
+      padding:10px 14px;
+      font-size:14px;
+      font-weight:900;
+      border-radius:999px;
+      box-shadow:none;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.6);
+      cursor:pointer;
+    }
+    .chipbtn.primary{
+      background:rgba(255,59,122,.14);
+      border-color:rgba(255,59,122,.22);
+      color:#7a0d2e;
+    }
+
+    .panel{
+      display:none;
+      margin:12px auto 0;
+      width:min(620px,94%);
+      padding:14px 14px;
+      border-radius:16px;
+      background:rgba(255,255,255,.62);
+      border:1px solid rgba(0,0,0,.06);
+      text-align:left;
+      line-height:1.55;
+      font-size:15px;
+      animation:pop .25s ease;
+    }
+
+    .quoteTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin:0 0 10px;
+      padding-bottom:10px;
+      border-bottom:1px dashed rgba(17,24,39,.14);
+    }
+    .badge{
+      font-weight:900;
+      padding:4px 10px;
+      border-radius:999px;
+      background:rgba(255,59,122,.12);
+      color:#7a0d2e;
+      font-size:12px;
+      letter-spacing:.3px;
+      white-space:nowrap;
+    }
+
+    .dialogue{
+      display:grid;
+      gap:10px;
+      margin-top:10px;
+    }
+    .line{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:6px;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(17,24,39,.08);
+      background:rgba(255,255,255,.55);
+    }
+    .who{
+      font-weight:950;
+      font-size:13px;
+      letter-spacing:.2px;
+      opacity:.85;
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .who .emoji{font-size:16px}
+    .say{
+      font-size:15px;
+      opacity:.95;
+    }
+
+    .spotify{
+      width:min(560px,94%);
+      margin:12px auto 0;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(0,0,0,.08);
+      background:rgba(255,255,255,.5);
+    }
+
+    .fireworks{
+      width:min(360px,90vw);
+      margin:10px auto 0;
+      display:block;
+      border-radius:14px;
+    }
+
+    #turtle{
+      position:fixed;
+      left:0; top:0;
+      transform:translate(-999px,-999px);
+      pointer-events:none;
+      z-index:5;
+      font-size:22px;
+      filter:drop-shadow(0 6px 10px rgba(0,0,0,.14));
+      transition:transform .04s linear;
+    }
+
+    @keyframes pop{
+      from{transform:scale(.96);opacity:0;}
+      to{transform:scale(1);opacity:1;}
     }
   </style>
 </head>
@@ -287,22 +317,66 @@
     <section class="result" id="result">
       <h2>
         Yayyy Vidhuuu 🐢💖<br>
-        Officially: Valentine unlocked ✨
+        Valentine unlocked ✨
       </h2>
 
       <div class="chips">
-        <button class="chipbtn primary" id="surpriseBtn" type="button">Tap for a tiny note 💌</button>
+        <button class="chipbtn primary" id="poemBtn" type="button">A tiny story 🌙</button>
         <button class="chipbtn" id="musicBtn" type="button">Play our vibe 🎶</button>
         <button class="chipbtn" id="moreConfettiBtn" type="button">More confetti 🎉</button>
       </div>
 
-      <div class="note" id="note">
-        <b>Dear Tippy Turtle,</b><br>
-        you make everything feel lighter, calmer, and a little more magical.<br>
-        Thank you for being you — now come collect your Valentine treat 😤🐢💖
+      <!-- The rewritten “sunset asked / I said” message -->
+      <div class="panel" id="poemPanel">
+        <div class="quoteTitle">
+          <span class="badge">FOR VIDHI</span>
+          <div style="font-weight:950; letter-spacing:.2px;">They all asked me the same thing…</div>
+        </div>
+
+        <div class="dialogue">
+          <div class="line">
+            <div class="who"><span class="emoji">🌇</span>Sunset</div>
+            <div class="say">“Am I the prettiest thing you’ve ever seen?”</div>
+            <div class="say"><b>Me:</b> “Sorry — her eyes are prettier.”</div>
+          </div>
+
+          <div class="line">
+            <div class="who"><span class="emoji">🌙</span>Moonlight</div>
+            <div class="say">“Do I shine the softest?”</div>
+            <div class="say"><b>Me:</b> “Sorry — her eyes shine softer.”</div>
+          </div>
+
+          <div class="line">
+            <div class="who"><span class="emoji">🌊</span>Ocean</div>
+            <div class="say">“Do I hold the deepest secrets?”</div>
+            <div class="say"><b>Me:</b> “Hey — her eyes hold deeper secrets than you.”</div>
+          </div>
+
+          <div class="line">
+            <div class="who"><span class="emoji">🌧️</span>Rain</div>
+            <div class="say">“Do I pour the most emotion?”</div>
+            <div class="say"><b>Me:</b> “Not today — her eyes pour more emotion.”</div>
+          </div>
+
+          <div class="line">
+            <div class="who"><span class="emoji">🌌</span>Skies</div>
+            <div class="say">“Am I your idea of heaven?”</div>
+            <div class="say"><b>Me:</b> “Beautiful — but I’ve already seen heaven in her eyes.”</div>
+          </div>
+
+          <div class="line">
+            <div class="who"><span class="emoji">🤫</span>Silence</div>
+            <div class="say">“Am I the loudest thing in the room?”</div>
+            <div class="say"><b>Me:</b> “Sorry — her silence speaks louder.”</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px; opacity:.8; font-size:13px;">
+          (If you’re reading this, Vidhi… yes, it’s you. 🐢)
+        </div>
       </div>
 
-      <!-- Cigarettes After Sex vibe: "Apocalypse" (Spotify embed) -->
+      <!-- Cigarettes After Sex vibe: "Apocalypse" -->
       <div class="spotify" id="spotifyBox" aria-label="Spotify player">
         <iframe
           title="Cigarettes After Sex - Apocalypse"
@@ -335,8 +409,8 @@
     const nickEl = document.getElementById("nick");
     const nameLine = document.getElementById("nameLine");
 
-    const surpriseBtn = document.getElementById("surpriseBtn");
-    const note = document.getElementById("note");
+    const poemBtn = document.getElementById("poemBtn");
+    const poemPanel = document.getElementById("poemPanel");
     const musicBtn = document.getElementById("musicBtn");
     const spotifyBox = document.getElementById("spotifyBox");
     const moreConfettiBtn = document.getElementById("moreConfettiBtn");
@@ -347,7 +421,7 @@
     setInterval(() => {
       i = (i + 1) % nicks.length;
       nickEl.textContent = nicks[i];
-      nameLine.textContent = nicks[(i + 2) % nicks.length]; // keeps headline cute too
+      nameLine.textContent = nicks[(i + 2) % nicks.length];
     }, 1500);
 
     // --- confetti setup
@@ -446,11 +520,17 @@
       result.style.display = "block";
       resizeConfettiCanvas();
       fullScreenConfetti();
+
+      // little nudge: open the story once by default
+      poemPanel.style.display = "block";
     });
 
-    // surprise note
-    surpriseBtn.addEventListener("click", () => {
-      note.style.display = (note.style.display === "block") ? "none" : "block";
+    // toggle story panel
+    poemBtn.addEventListener("click", () => {
+      poemPanel.style.display = (poemPanel.style.display === "block") ? "none" : "block";
+      if (poemPanel.style.display === "block") {
+        poemPanel.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
     });
 
     // scroll to music (Spotify can't reliably autoplay; this makes it easy)
@@ -478,14 +558,12 @@
     }
 
     document.addEventListener("pointermove", (e) => {
-      // throttle a bit for smoothness
       const now = performance.now();
       if (now - lastMove < 12) return;
       lastMove = now;
       moveTurtle(e.clientX, e.clientY);
     }, { passive: true });
 
-    // on touch devices, show turtle near taps too
     document.addEventListener("pointerdown", (e) => moveTurtle(e.clientX, e.clientY), { passive: true });
   </script>
 </body>
