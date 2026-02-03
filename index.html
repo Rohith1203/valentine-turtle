@@ -64,7 +64,7 @@
       filter:blur(6px);
     }
 
-    /* cute cat on the starting page */
+    /* cat on the starting page */
     .catwrap{
       width:min(260px,80vw);
       margin:6px auto 8px;
@@ -204,12 +204,15 @@
 <body>
   <canvas id="confettiCanvas"></canvas>
 
-  <main class="card" id="card">
+  <main class="card">
     <div class="float"></div>
 
-    <!-- ✅ cat on the front page -->
+    <!-- ✅ Your base64 cat image on the front page -->
     <div class="catwrap" id="catwrap" aria-label="cute cat">
-      <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="cute cat" />
+      <img
+        alt="cute cat"
+        src="data:image/jpeg;base64,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"
+      />
     </div>
 
     <h1>
@@ -285,7 +288,6 @@
     const zone = document.getElementById("zone");
     const result = document.getElementById("result");
     const hint = document.getElementById("hint");
-    const catwrap = document.getElementById("catwrap");
 
     const nameLine = document.getElementById("nameLine");
     const nickEl = document.getElementById("nick");
@@ -298,7 +300,7 @@
     const confettiCanvas = document.getElementById("confettiCanvas");
     const confettiInstance = confetti.create(confettiCanvas, { resize:true });
 
-    // ✅ nickname rotator (fixes the multiple aka issue)
+    // ✅ rotating single "aka" name + headline changes
     const nicks = ["Vidd", "Vidhu", "Tippy Turtle", "Cutuu Turtle"];
     let i = 0;
     setInterval(() => {
@@ -307,13 +309,10 @@
       nameLine.textContent = nicks[(i + 2) % nicks.length];
     }, 1500);
 
-    // ✅ No auto-scroll. Keeps top readable.
+    // ✅ No auto-scroll
     yesBtn.onclick = () => {
       zone.style.display = "none";
       hint.style.display = "none";
-
-      // keep cat visible on top even after yes (optional)
-      catwrap.style.display = "block";
 
       result.style.display = "block";
       story.style.display = "block";
@@ -324,12 +323,10 @@
       confettiInstance({ particleCount: 200, spread: 140 });
     };
 
-    // story toggle
     storyBtn.onclick = () => {
       story.style.display = (story.style.display === "block") ? "none" : "block";
     };
 
-    // music toggle (gentle scroll only when opening)
     musicBtn.onclick = () => {
       const open = spotify.style.display === "block";
       if (open) {
