@@ -64,6 +64,18 @@
       filter:blur(6px);
     }
 
+    /* cute cat on the starting page */
+    .catwrap{
+      width:min(260px,80vw);
+      margin:6px auto 8px;
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 10px 30px rgba(0,0,0,.12);
+      border:1px solid rgba(0,0,0,.06);
+      background:rgba(255,255,255,.6);
+    }
+    .catwrap img{display:block;width:100%;height:auto}
+
     h1{
       font-size:clamp(26px,4vw,44px);
       margin:12px 0 10px;
@@ -120,11 +132,6 @@
       animation:pop .35s ease;
     }
 
-    /* ✅ This keeps content readable and prevents "feels like bottom" jump */
-    .result h2{
-      margin:10px 0 12px;
-    }
-
     .chips{
       display:flex;
       gap:10px;
@@ -164,11 +171,10 @@
       font-size:15px;
     }
 
-    /* ✅ Start hidden; user can open with button */
     .spotify{
       display:none;
       width:min(560px,94%);
-      margin:14px auto 0; /* a bit more breathing room */
+      margin:14px auto 0;
       border-radius:14px;
       overflow:hidden;
       border:1px solid rgba(0,0,0,.08);
@@ -201,10 +207,17 @@
   <main class="card" id="card">
     <div class="float"></div>
 
-    <h1>Cutuu turtle, will you be my Valentine?</h1>
+    <!-- ✅ cat on the front page -->
+    <div class="catwrap" id="catwrap" aria-label="cute cat">
+      <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" alt="cute cat" />
+    </div>
+
+    <h1>
+      <span id="nameLine">Cutuu turtle</span>, will you be my Valentine?
+    </h1>
 
     <p class="sub">
-      (aka <span class="nick">Vidd / Vidhu / Tippy Turtle</span>) ✨
+      (aka <span class="nick" id="nick">Vidd</span>) ✨
     </p>
 
     <section class="button-zone" id="zone">
@@ -223,22 +236,22 @@
       </div>
 
       <div class="panel" id="story">
-        🌇 <b>Sunset</b> asked if it was the prettiest thing I’d seen —  
+        🌇 <b>Sunset</b> asked if it was the prettiest thing I’d seen —
         I said her eyes are prettier.<br><br>
 
-        🌙 <b>Moonlight</b> asked if it shined the softest —  
+        🌙 <b>Moonlight</b> asked if it shined the softest —
         I said her eyes shine softer.<br><br>
 
-        🌊 <b>Ocean</b> asked if it held the deepest secrets —  
+        🌊 <b>Ocean</b> asked if it held the deepest secrets —
         I said her eyes hold deeper ones.<br><br>
 
-        🌧️ <b>Rain</b> asked if it poured the most emotion —  
+        🌧️ <b>Rain</b> asked if it poured the most emotion —
         not today, I said.<br><br>
 
-        🌌 <b>Skies</b> asked if it was heaven —  
+        🌌 <b>Skies</b> asked if it was heaven —
         beautiful, but I’ve already seen it in her eyes.<br><br>
 
-        🤫 <b>Silence</b> asked if it spoke the loudest —  
+        🤫 <b>Silence</b> asked if it spoke the loudest —
         I smiled. Her silence does.
 
         <div class="footerNote">
@@ -272,6 +285,10 @@
     const zone = document.getElementById("zone");
     const result = document.getElementById("result");
     const hint = document.getElementById("hint");
+    const catwrap = document.getElementById("catwrap");
+
+    const nameLine = document.getElementById("nameLine");
+    const nickEl = document.getElementById("nick");
 
     const storyBtn = document.getElementById("storyBtn");
     const story = document.getElementById("story");
@@ -281,16 +298,26 @@
     const confettiCanvas = document.getElementById("confettiCanvas");
     const confettiInstance = confetti.create(confettiCanvas, { resize:true });
 
-    // ✅ No auto-scroll anywhere. Keeps the top readable.
+    // ✅ nickname rotator (fixes the multiple aka issue)
+    const nicks = ["Vidd", "Vidhu", "Tippy Turtle", "Cutuu Turtle"];
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % nicks.length;
+      nickEl.textContent = nicks[i];
+      nameLine.textContent = nicks[(i + 2) % nicks.length];
+    }, 1500);
+
+    // ✅ No auto-scroll. Keeps top readable.
     yesBtn.onclick = () => {
       zone.style.display = "none";
       hint.style.display = "none";
-      result.style.display = "block";
 
-      // show story by default (same as your earlier vibe)
+      // keep cat visible on top even after yes (optional)
+      catwrap.style.display = "block";
+
+      result.style.display = "block";
       story.style.display = "block";
 
-      // keep music hidden until she taps "Play our vibe"
       spotify.style.display = "none";
       musicBtn.textContent = "Play our vibe 🎶";
 
@@ -302,7 +329,7 @@
       story.style.display = (story.style.display === "block") ? "none" : "block";
     };
 
-    // music toggle (optional scroll ONLY when opening music, and not to bottom)
+    // music toggle (gentle scroll only when opening)
     musicBtn.onclick = () => {
       const open = spotify.style.display === "block";
       if (open) {
@@ -311,7 +338,6 @@
       } else {
         spotify.style.display = "block";
         musicBtn.textContent = "Hide our vibe 🙈";
-        // gentle scroll just to the player, not bottom-jumpy
         spotify.scrollIntoView({ behavior:"smooth", block:"nearest" });
       }
     };
