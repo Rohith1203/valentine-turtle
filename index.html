@@ -220,7 +220,9 @@
       opacity:.95;
     }
 
+    /* ✅ Spotify starts hidden (for proper toggle) */
     .spotify{
+      display:none;
       width:min(560px,94%);
       margin:12px auto 0;
       border-radius:14px;
@@ -261,7 +263,6 @@
   <main class="card">
     <div class="float"></div>
 
-    <!-- cute art -->
     <svg class="art" viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
         <linearGradient id="fur" x1="0" x2="1">
@@ -326,7 +327,6 @@
         <button class="chipbtn" id="moreConfettiBtn" type="button">More confetti 🎉</button>
       </div>
 
-      <!-- The rewritten “sunset asked / I said” message -->
       <div class="panel" id="poemPanel">
         <div class="quoteTitle">
           <span class="badge">FOR VIDHI</span>
@@ -376,7 +376,6 @@
         </div>
       </div>
 
-      <!-- Cigarettes After Sex vibe: "Apocalypse" -->
       <div class="spotify" id="spotifyBox" aria-label="Spotify player">
         <iframe
           title="Cigarettes After Sex - Apocalypse"
@@ -398,7 +397,6 @@
   </main>
 
   <script>
-    // --- elements
     const zone = document.getElementById("zone");
     const yesBtn = document.getElementById("yesBtn");
     const noBtn = document.getElementById("noBtn");
@@ -415,7 +413,7 @@
     const spotifyBox = document.getElementById("spotifyBox");
     const moreConfettiBtn = document.getElementById("moreConfettiBtn");
 
-    // --- nickname rotator (Vidhi-coded)
+    // nickname rotator
     const nicks = ["Vidd", "Vidhu", "Tippy Turtle", "Cutuu Turtle"];
     let i = 0;
     setInterval(() => {
@@ -424,7 +422,7 @@
       nameLine.textContent = nicks[(i + 2) % nicks.length];
     }, 1500);
 
-    // --- confetti setup
+    // confetti setup
     function resizeConfettiCanvas() {
       const dpr = Math.max(1, window.devicePixelRatio || 1);
       confettiCanvas.width = Math.floor(window.innerWidth * dpr);
@@ -466,17 +464,15 @@
       }, 300);
     }
 
-    // --- button antics
+    // "No" moves away
     let yesScale = 1;
     function growYes() {
       yesScale = Math.min(2.2, yesScale + 0.1);
       yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
     }
-
     function clamp(n, min, max) {
       return Math.max(min, Math.min(max, n));
     }
-
     function moveNo(px, py) {
       const z = zone.getBoundingClientRect();
       const b = noBtn.getBoundingClientRect();
@@ -509,7 +505,6 @@
       if (d < 140) moveNo(e.clientX, e.clientY);
     });
 
-    // prevent "No" click
     noBtn.addEventListener("click", e => e.preventDefault());
 
     // YES flow
@@ -520,12 +515,10 @@
       result.style.display = "block";
       resizeConfettiCanvas();
       fullScreenConfetti();
-
-      // little nudge: open the story once by default
       poemPanel.style.display = "block";
     });
 
-    // toggle story panel
+    // story toggle
     poemBtn.addEventListener("click", () => {
       poemPanel.style.display = (poemPanel.style.display === "block") ? "none" : "block";
       if (poemPanel.style.display === "block") {
@@ -533,9 +526,17 @@
       }
     });
 
-    // scroll to music (Spotify can't reliably autoplay; this makes it easy)
+    // ✅ music toggle (fixed)
     musicBtn.addEventListener("click", () => {
-      spotifyBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      const isOpen = spotifyBox.style.display === "block";
+      if (isOpen) {
+        spotifyBox.style.display = "none";
+        musicBtn.textContent = "Play our vibe 🎶";
+      } else {
+        spotifyBox.style.display = "block";
+        musicBtn.textContent = "Hide our vibe 🙈";
+        spotifyBox.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
     });
 
     // extra confetti
@@ -549,7 +550,7 @@
       });
     });
 
-    // --- tiny turtle follower
+    // turtle follower
     const turtle = document.getElementById("turtle");
     let lastMove = 0;
 
