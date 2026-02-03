@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Vidhu 🐢💖</title>
 
-  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
   <style>
@@ -16,6 +15,7 @@
       --yes:#ff3b7a;
       --yesHover:#ff1f68;
       --ink:#111827;
+      --line:rgba(17,24,39,.10);
     }
 
     *{box-sizing:border-box}
@@ -53,7 +53,7 @@
 
     .catwrap{
       width:min(260px,80vw);
-      margin:6px auto 12px;
+      margin:6px auto 10px;
       border-radius:18px;
       overflow:hidden;
       box-shadow:0 10px 30px rgba(0,0,0,.12);
@@ -63,13 +63,13 @@
 
     h1{
       font-size:clamp(26px,4vw,44px);
-      margin:12px 0 14px;
+      margin:12px 0 8px;
     }
 
     .sub{
+      margin:0 0 16px;
       font-size:14px;
-      opacity:.75;
-      margin-bottom:18px;
+      opacity:.78;
     }
 
     .button-zone{
@@ -99,11 +99,7 @@
     #yesBtn:hover{background:var(--yesHover);}
     #noBtn{left:62%;background:#e5e7eb;color:#111827;will-change:left,top;}
 
-    .hint{
-      margin-top:10px;
-      font-size:13px;
-      opacity:.7;
-    }
+    .hint{margin-top:10px;font-size:13px;opacity:.7;}
 
     .result{
       display:none;
@@ -115,17 +111,26 @@
       display:flex;
       gap:10px;
       justify-content:center;
-      margin:12px 0;
       flex-wrap:wrap;
+      margin:14px 0 10px;
     }
 
     .chipbtn{
+      position:static;
+      transform:none;
       padding:10px 14px;
+      font-size:14px;
+      font-weight:900;
       border-radius:999px;
-      border:none;
-      font-weight:800;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.6);
       cursor:pointer;
-      background:rgba(255,59,122,.15);
+    }
+
+    .chipbtn.primary{
+      background:rgba(255,59,122,.14);
+      border-color:rgba(255,59,122,.22);
+      color:#7a0d2e;
     }
 
     .panel{
@@ -134,8 +139,11 @@
       width:min(620px,94%);
       padding:14px;
       border-radius:16px;
-      background:rgba(255,255,255,.65);
+      background:rgba(255,255,255,.62);
+      border:1px solid rgba(0,0,0,.06);
+      text-align:left;
       line-height:1.55;
+      font-size:15px;
     }
 
     .spotify{
@@ -144,6 +152,12 @@
       margin:14px auto 0;
       border-radius:14px;
       overflow:hidden;
+    }
+
+    .footerNote{
+      margin-top:12px;
+      opacity:.8;
+      font-size:13px;
     }
 
     .fireworks{
@@ -165,7 +179,6 @@
 
 <main class="card">
 
-  <!-- Animated cat -->
   <div class="catwrap">
     <img
       alt="muah cat kiss"
@@ -173,7 +186,7 @@
     />
   </div>
 
-  <h1>Cutuu Turtle, will you be my Valentine?</h1>
+  <h1>Cutuu turtle, will you be my Valentine?</h1>
   <p class="sub">(aka Vidhu 🐢)</p>
 
   <section class="button-zone" id="zone">
@@ -186,16 +199,39 @@
   <section class="result" id="result">
     <h2>Valentine unlocked 🐢💖</h2>
 
+    <!-- POEM (UNCHANGED) -->
     <div class="chips">
-      <button class="chipbtn" id="storyBtn">A tiny story 🌙</button>
-      <button class="chipbtn" id="musicBtn">Play our vibe 🎶</button>
+      <button class="chipbtn primary" id="storyBtn" type="button">
+        A tiny story 🌙
+      </button>
+      <button class="chipbtn" id="musicBtn" type="button">
+        Play our vibe 🎶
+      </button>
     </div>
 
     <div class="panel" id="story">
-      🌙 I looked at the world — then I looked at you.<br><br>
-      Somehow, everything felt softer, quieter, safer.<br><br>
-      If love had a sound… it would play gently in the background,
-      promising that nothing’s gonna hurt you, baby. 🐢💗
+      🌇 <b>Sunset</b> asked if it was the prettiest thing I’d seen —
+      I said her eyes are prettier.<br><br>
+
+      🌙 <b>Moonlight</b> asked if it shined the softest —
+      I said her eyes shine softer.<br><br>
+
+      🌊 <b>Ocean</b> asked if it held the deepest secrets —
+      I said her eyes hold deeper ones.<br><br>
+
+      🌧️ <b>Rain</b> asked if it poured the most emotion —
+      not today, I said.<br><br>
+
+      🌌 <b>Skies</b> asked if it was heaven —
+      beautiful, but I’ve already seen it in her eyes.<br><br>
+
+      🤫 <b>Silence</b> asked if it spoke the loudest —
+      I smiled. Her silence does.
+
+      <div class="footerNote">
+        If you’re reading this, Vidhi… yes, it’s you. 🐢<br>
+        The one who makes ordinary moments feel quietly special.
+      </div>
     </div>
 
     <div class="spotify" id="spotify">
@@ -231,7 +267,6 @@
   const confettiCanvas = document.getElementById("confettiCanvas");
   const confettiInstance = confetti.create(confettiCanvas, { resize:true });
 
-  // YES grows
   let yesScale = 1;
   function growYes(){
     yesScale = Math.min(2.2, yesScale + 0.08);
