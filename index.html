@@ -100,6 +100,7 @@
       cursor:pointer;
       box-shadow:0 10px 24px rgba(0,0,0,.14);
       user-select:none;
+      -webkit-tap-highlight-color:transparent;
       transition:transform .12s ease, background .12s ease;
     }
 
@@ -160,6 +161,8 @@
       margin:14px auto 0;
       border-radius:14px;
       overflow:hidden;
+      border:1px solid rgba(0,0,0,.08);
+      background:rgba(255,255,255,.5);
     }
 
     .footerNote{
@@ -183,156 +186,176 @@
 </head>
 
 <body>
-<canvas id="confettiCanvas"></canvas>
+  <canvas id="confettiCanvas"></canvas>
 
-<main class="card">
-
-  <div class="catwrap">
-    <img
-      alt="muah cat kiss"
-      src="https://media.giphy.com/media/ytu2GUYbvhz7zShGwS/giphy.gif"
-    />
-  </div>
-
-  <!-- ROTATING NAME -->
-  <h1>
-    <span id="nameLine">Vidhu</span>, will you be my Valentine?
-  </h1>
-  <p class="sub">(aka <span class="nick" id="nick">Vidhu</span> 🐢)</p>
-
-  <section class="button-zone" id="zone">
-    <button id="yesBtn">Yes</button>
-    <button id="noBtn">No</button>
-  </section>
-
-  <div class="hint" id="hint">“No” seems a bit shy 😈</div>
-
-  <section class="result" id="result">
-    <h2>Valentine unlocked 🐢💖</h2>
-
-    <div class="chips">
-      <button class="chipbtn primary" id="storyBtn">A tiny story 🌙</button>
-      <button class="chipbtn" id="musicBtn">Play our vibe 🎶</button>
+  <main class="card">
+    <div class="catwrap" aria-label="cute cat">
+      <img
+        alt="muah cat kiss"
+        src="https://media.giphy.com/media/ytu2GUYbvhz7zShGwS/giphy.gif"
+      />
     </div>
 
-    <div class="panel" id="story">
-      🌇 <b>Sunset</b> asked if it was the prettiest thing I’d seen —
-      I said her eyes are prettier.<br><br>
+    <h1><span id="nameLine">Vidhu</span>, will you be my Valentine?</h1>
+    <p class="sub">(aka <span class="nick" id="nick">Vidhu</span>) ✨</p>
 
-      🌙 <b>Moonlight</b> asked if it shined the softest —
-      I said her eyes shine softer.<br><br>
+    <section class="button-zone" id="zone">
+      <button id="yesBtn">Yes</button>
+      <button id="noBtn">No</button>
+    </section>
 
-      🌊 <b>Ocean</b> asked if it held the deepest secrets —
-      I said her eyes hold deeper ones.<br><br>
+    <div class="hint" id="hint">“No” seems a bit shy 😈</div>
 
-      🌧️ <b>Rain</b> asked if it poured the most emotion —
-      not today, I said.<br><br>
+    <section class="result" id="result">
+      <h2>Valentine unlocked 🐢💖</h2>
 
-      🌌 <b>Skies</b> asked if it was heaven —
-      beautiful, but I’ve already seen it in her eyes.<br><br>
-
-      🤫 <b>Silence</b> asked if it spoke the loudest —
-      I smiled. Her silence does.
-
-      <div class="footerNote">
-        If you’re reading this, Vidhi… yes, it’s you. 🐢<br>
-        The one who makes ordinary moments feel quietly special.
+      <div class="chips">
+        <button class="chipbtn primary" id="storyBtn" type="button">A tiny story 🌙</button>
+        <button class="chipbtn" id="musicBtn" type="button">Play our vibe 🎶</button>
       </div>
-    </div>
 
-    <div class="spotify" id="spotify">
-      <iframe
-        title="Nothing's Gonna Hurt You Baby - Cigarettes After Sex"
-        src="https://open.spotify.com/embed/track/3G6hD9B2ZHOsgf4WfNu7X1"
-        width="100%"
-        height="152"
-        frameborder="0"
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
-      </iframe>
-    </div>
+      <div class="panel" id="story">
+        🌇 <b>Sunset</b> asked if it was the prettiest thing I’d seen —
+        I said her eyes are prettier.<br><br>
 
-    <img
-      class="fireworks"
-      src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
-      alt="Fireworks"
-    />
-  </section>
-</main>
+        🌙 <b>Moonlight</b> asked if it shined the softest —
+        I said her eyes shine softer.<br><br>
 
-<script>
-  /* ---------- ROTATING NICKNAMES ---------- */
-  const names = ["Vidhu", "Vidd", "Tipsy Turtle", "Cutuu Turtle"];
-  let i = 0;
-  const nameLine = document.getElementById("nameLine");
-  const nick = document.getElementById("nick");
+        🌊 <b>Ocean</b> asked if it held the deepest secrets —
+        I said her eyes hold deeper ones.<br><br>
 
-  setInterval(() => {
-    i = (i + 1) % names.length;
-    nameLine.textContent = names[i];
-    nick.textContent = names[i];
-  }, 1500);
+        🌧️ <b>Rain</b> asked if it poured the most emotion —
+        not today, I said.<br><br>
 
-  /* ---------- BUTTON LOGIC ---------- */
-  const yesBtn = document.getElementById("yesBtn");
-  const noBtn = document.getElementById("noBtn");
-  const zone = document.getElementById("zone");
-  const result = document.getElementById("result");
-  const hint = document.getElementById("hint");
-  const storyBtn = document.getElementById("storyBtn");
-  const musicBtn = document.getElementById("musicBtn");
-  const story = document.getElementById("story");
-  const spotify = document.getElementById("spotify");
+        🌌 <b>Skies</b> asked if it was heaven —
+        beautiful, but I’ve already seen it in her eyes.<br><br>
 
-  const confettiInstance = confetti.create(
-    document.getElementById("confettiCanvas"),
-    { resize:true }
-  );
+        🤫 <b>Silence</b> asked if it spoke the loudest —
+        I smiled. Her silence does.
 
-  let yesScale = 1;
-  function growYes(){
-    yesScale = Math.min(2.2, yesScale + 0.08);
-    yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
-  }
+        <div class="footerNote">
+          If you’re reading this, Vidhi… yes, it’s you. 🐢<br>
+          The one who makes ordinary moments feel quietly special.
+        </div>
+      </div>
 
-  function clamp(n,min,max){return Math.max(min,Math.min(max,n));}
+      <div class="spotify" id="spotify">
+        <iframe
+          title="Nothing's Gonna Hurt You Baby - Cigarettes After Sex"
+          src="https://open.spotify.com/embed/track/7cs7MLtAWvsdf3w5kBvfK2"
+          width="100%"
+          height="152"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture">
+        </iframe>
+      </div>
 
-  function moveNo(px,py){
-    const z = zone.getBoundingClientRect();
-    const b = noBtn.getBoundingClientRect();
-    let dx = (b.left+b.width/2)-px;
-    let dy = (b.top+b.height/2)-py;
-    let mag = Math.hypot(dx,dy)||1;
-    dx/=mag; dy/=mag;
-    noBtn.style.left = clamp((b.left-z.left)+dx*160,0,z.width-b.width)+"px";
-    noBtn.style.top  = clamp((b.top-z.top)+dy*160,0,z.height-b.height)+"px";
-    noBtn.style.transform="none";
-    growYes();
-  }
+      <img
+        class="fireworks"
+        src="https://media.giphy.com/media/26ufdipQqU2lhNA4g/giphy.gif"
+        alt="Fireworks"
+      />
+    </section>
+  </main>
 
-  zone.addEventListener("pointermove",e=>{
-    const b=noBtn.getBoundingClientRect();
-    if(Math.hypot((b.left+b.width/2)-e.clientX,(b.top+b.height/2)-e.clientY)<140)
-      moveNo(e.clientX,e.clientY);
-  });
+  <script>
+    /* rotating names on the front page */
+    const names = ["Vidhu", "Vidd", "Tipsy Turtle", "Cutuu Turtle"];
+    let i = 0;
+    const nameLine = document.getElementById("nameLine");
+    const nickEl = document.getElementById("nick");
 
-  noBtn.onclick = e => e.preventDefault();
+    setInterval(() => {
+      i = (i + 1) % names.length;
+      nameLine.textContent = names[i];
+      nickEl.textContent = names[i];
+    }, 1500);
 
-  yesBtn.onclick = () => {
-    zone.style.display="none";
-    hint.style.display="none";
-    result.style.display="block";
-    story.style.display="block";
-    confettiInstance({particleCount:220,spread:140});
-  };
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn  = document.getElementById("noBtn");
+    const zone   = document.getElementById("zone");
+    const result = document.getElementById("result");
+    const hint   = document.getElementById("hint");
 
-  storyBtn.onclick = () =>
-    story.style.display = story.style.display==="block"?"none":"block";
+    const storyBtn = document.getElementById("storyBtn");
+    const story    = document.getElementById("story");
+    const musicBtn = document.getElementById("musicBtn");
+    const spotify  = document.getElementById("spotify");
 
-  musicBtn.onclick = () => {
-    const open = spotify.style.display==="block";
-    spotify.style.display = open?"none":"block";
-    musicBtn.textContent = open?"Play our vibe 🎶":"Hide our vibe 🙈";
-  };
-</script>
+    const confettiCanvas = document.getElementById("confettiCanvas");
+    const confettiInstance = confetti.create(confettiCanvas, { resize:true });
+
+    /* yes grows */
+    let yesScale = 1;
+    function growYes(){
+      yesScale = Math.min(2.2, yesScale + 0.08);
+      yesBtn.style.transform = `translateY(-50%) scale(${yesScale})`;
+    }
+
+    function clamp(n, min, max){ return Math.max(min, Math.min(max, n)); }
+
+    /* no runs away */
+    function moveNo(px, py){
+      const z = zone.getBoundingClientRect();
+      const b = noBtn.getBoundingClientRect();
+
+      let dx = (b.left + b.width/2) - px;
+      let dy = (b.top  + b.height/2) - py;
+      let mag = Math.hypot(dx, dy) || 1;
+      dx /= mag; dy /= mag;
+
+      let newLeft = (b.left - z.left) + dx * 160;
+      let newTop  = (b.top  - z.top ) + dy * 160;
+
+      newLeft = clamp(newLeft, 0, z.width  - b.width);
+      newTop  = clamp(newTop,  0, z.height - b.height);
+
+      noBtn.style.left = newLeft + "px";
+      noBtn.style.top  = newTop  + "px";
+      noBtn.style.transform = "none";
+      growYes();
+    }
+
+    zone.addEventListener("pointermove", (e) => {
+      const b = noBtn.getBoundingClientRect();
+      const d = Math.hypot(
+        (b.left + b.width/2) - e.clientX,
+        (b.top  + b.height/2) - e.clientY
+      );
+      if (d < 140) moveNo(e.clientX, e.clientY);
+    });
+
+    noBtn.addEventListener("click", (e) => e.preventDefault());
+
+    /* YES click */
+    yesBtn.onclick = () => {
+      zone.style.display = "none";
+      hint.style.display = "none";
+
+      result.style.display = "block";
+      story.style.display = "block";
+
+      spotify.style.display = "none";
+      musicBtn.textContent = "Play our vibe 🎶";
+
+      confettiInstance({ particleCount: 220, spread: 140 });
+    };
+
+    storyBtn.onclick = () => {
+      story.style.display = (story.style.display === "block") ? "none" : "block";
+    };
+
+    musicBtn.onclick = () => {
+      const open = spotify.style.display === "block";
+      if (open) {
+        spotify.style.display = "none";
+        musicBtn.textContent = "Play our vibe 🎶";
+      } else {
+        spotify.style.display = "block";
+        musicBtn.textContent = "Hide our vibe 🙈";
+        spotify.scrollIntoView({ behavior:"smooth", block:"nearest" });
+      }
+    };
+  </script>
 </body>
 </html>
